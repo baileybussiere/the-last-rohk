@@ -9,6 +9,7 @@ public class Tile
 	public boolean isKey = false;
 	public boolean isSolid;
 	public boolean breakable = false;
+	public int breakTimer = 0;
 	public Boolean[] borders = new Boolean[4];
 	public Boolean[] corners = new Boolean[4];
  	public Image texture;
@@ -47,6 +48,8 @@ public class Tile
 	
 	public Tile tick(Level l, int x, int y, LibLibrary lib)
 	{
+		if(breakTimer > 0)
+			breakTimer--;
 		return this;
 	}
 	
@@ -83,16 +86,22 @@ public class Tile
 	
 	public int damage()
 	{
-		this.damage++;
-		int i;
-		if (this.damage >= this.maxDamage)
+		int i = 0;
+		if(this.breakTimer == 0)
 		{
-			i = -1;
-		}
-		else 
-		{
-			i = 0;
-			this.texture = this.texLib.imageListTile.get(this.tex + this.damage);
+			this.damage++;
+			if (this.damage >= this.maxDamage)
+			{
+				this.needsTick = false;
+				i = -1;
+			}
+			else
+			{
+				i = 1;
+				this.needsTick = true;
+				this.breakTimer = 15;
+				this.texture = this.texLib.imageListTile.get(this.tex + this.damage);
+			}
 		}
 		return i;
 	}

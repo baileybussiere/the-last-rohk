@@ -408,6 +408,14 @@ public class Screen extends JPanel implements Runnable
 						int a = t.damage();
 						if (a == -1)
 							this.level.tiles2[x][y] = null;
+						else if(a == 1)
+						{
+							Random r = new Random(System.currentTimeMillis());
+							for (int pc = 0; pc < (20 + r.nextInt(4)); pc++)
+							{
+								particles.add(new Particle(libLibrary.tex.imageListParticles.get(0), gX(x*32) + 16, gY(y*32) + 16, 4 + (r.nextDouble()*1), r.nextDouble()*2*Math.PI, 0.25, 12 + r.nextInt(12)));
+							}
+						}
 					}
 					this.level.entities[0].events.set(i, null);
 				}
