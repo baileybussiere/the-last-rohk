@@ -99,7 +99,7 @@ public class Tile
 			{
 				i = 1;
 				this.needsTick = true;
-				this.breakTimer = 15;
+				this.breakTimer = 20;
 				this.texture = this.texLib.imageListTile.get(this.tex + this.damage);
 			}
 		}

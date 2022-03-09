@@ -114,7 +114,7 @@ public class LevelList
 			level = new Level(layer1, layer2, entities, lib);
 			for(int i = 0; i < signC; i++)
 			{
-				level.tiles2[signPos[i][0]][signPos[i][1]] = new TileSign(lib.tex, 14, messages[i]);
+				level.tiles2[signPos[i][0]][signPos[i][1]] = new TileSign(lib.tex, i, 14, messages[i]);
 			}
 			return level;
 		}

@@ -22,6 +22,7 @@ import levels.LevelList;
 import data.LibLibrary;
 import data.Tile;
 import data.TileSign;
+import data.Event;
 import entities.Entity;
 import entities.EntityBolt;
 import entities.EntityEnemy;
@@ -52,7 +53,8 @@ public class Screen extends JPanel implements Runnable
 	boolean changingLvls = false;
 	long[] lastProcessed = {0, 0, 0, 0};
 	boolean[] keysDown = {false, false, false, false, false};
-	
+	Entity player;
+
 	public Screen(JFrame frame, LibLibrary lib)
 	{
 		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "up_pressed");
@@ -165,6 +167,7 @@ public class Screen extends JPanel implements Runnable
 		});
 		this.libLibrary = lib;
 		this.level = this.copyLvl(LevelList.getLevel(lib, this.currentLvl));
+		this.player = this.level.entities[0];
 		//this.levels[0].spawn(new EntityBolt(6D, 6D, -1, 0, 2, lib));
 		this.gameT = new Thread(this);
 		this.gameT.start();
@@ -218,8 +221,8 @@ public class Screen extends JPanel implements Runnable
 					Screen.this.lastTime = System.currentTimeMillis();
 					Screen.this.hasBegun = true;
 				}
-				Screen.this.level.entities[0].vX = -Screen.this.level.entities[0].maxSpeed;
-				Screen.this.level.entities[0].vY = 0;
+				Screen.this.player.vX = -Screen.this.player.maxSpeed;
+				Screen.this.player.vY = 0;
 				lastProcessed[0] = System.currentTimeMillis();
 			}
 		}
@@ -232,8 +235,8 @@ public class Screen extends JPanel implements Runnable
 					Screen.this.lastTime = System.currentTimeMillis();
 					Screen.this.hasBegun = true;
 				}
-				Screen.this.level.entities[0].vY = -Screen.this.level.entities[0].maxSpeed;
-				Screen.this.level.entities[0].vX = 0;
+				Screen.this.player.vY = -Screen.this.player.maxSpeed;
+				Screen.this.player.vX = 0;
 				lastProcessed[1] = System.currentTimeMillis();
 			}
 		}
@@ -246,8 +249,8 @@ public class Screen extends JPanel implements Runnable
 					Screen.this.lastTime = System.currentTimeMillis();
 					Screen.this.hasBegun = true;
 				}
-				Screen.this.level.entities[0].vX = Screen.this.level.entities[0].maxSpeed;
-				Screen.this.level.entities[0].vY = 0;
+				Screen.this.player.vX = Screen.this.player.maxSpeed;
+				Screen.this.player.vY = 0;
 				lastProcessed[2] = System.currentTimeMillis();
 			}
 		}
@@ -260,8 +263,8 @@ public class Screen extends JPanel implements Runnable
 					Screen.this.lastTime = System.currentTimeMillis();
 					Screen.this.hasBegun = true;
 				}
-				Screen.this.level.entities[0].vY = Screen.this.level.entities[0].maxSpeed;
-				Screen.this.level.entities[0].vX = 0;
+				Screen.this.player.vY = Screen.this.player.maxSpeed;
+				Screen.this.player.vX = 0;
 				lastProcessed[3] = System.currentTimeMillis();
 			}
 		}
@@ -297,32 +300,35 @@ public class Screen extends JPanel implements Runnable
 		{
 			for (int i = 0; i < this.level.entities.length; i++)
 			{
-				if (this.level.entities[i] != null)
-					this.level.entities[i] = this.level.entities[i].update(.006, this.level);
+				Entity entity = this.level.entities[i];
+				if (entity != null)
+					entity = entity.update(.006, this.level);
 			}
 			for (int i = 0; i < this.level.ents2.length; i++)
 			{
-				if (this.level.ents2[i] != null)
-					this.level.ents2[i] = this.level.ents2[i].update(.006, this.level);
+				Entity entity = this.level.ents2[i];
+				if (entity != null)
+					entity = entity.update(.006, this.level);
 			}
 			for (int y = 0; y < 25; y++)
 			{
 				for (int x = 0; x < 38; x++)
 				{
-					if (this.level.tiles2[x][y] != null && this.level.tiles2[x][y].needsTick)
+					Tile tile = this.level.tiles2[x][y];
+					if (tile != null && tile.needsTick)
 					{
-						this.level.tiles2[x][y] = this.level.tiles2[x][y].tick(this.level, x, y, this.libLibrary);
+						tile = tile.tick(this.level, x, y, this.libLibrary);
 					}
 				}
 			}
 		}
-		if (this.level.entities[0].dead && !this.gameOver)
+		if (this.player.dead && !this.gameOver)
 		{
 			Entity e;
-			if (this.level.entities[0].killer != null)
-				e = this.level.entities[0].killer;
+			if (this.player.killer != null)
+				e = this.player.killer;
 			else
-				e = this.level.entities[0];
+				e = this.player;
 			animations.add(new Animation(libLibrary.tex.animationList.get(0), gX(e.x*32) - 16, gY(e.y*32) - 16, 64, 64));
 			Random r = new Random(System.currentTimeMillis());
 			for (int i = 0; i < (40 + r.nextInt(4)); i++)
@@ -343,18 +349,19 @@ public class Screen extends JPanel implements Runnable
 		}
 		if (!this.gameOver)
 		{
-			int j = this.level.entities[0].events.size();
-			if (this.level.entities[0].events != null)
+			int j = this.player.events.size();
+			if (this.player.events != null)
 			{
 			for (int i = 0; i < j; i++)
 			{
-				if (this.level.entities[0].events.get(i) == null)
+				Event event = this.player.events.get(i);
+				if (event == null)
 				{
 					
 				}
-				else if (this.level.entities[0].events.get(i).name.equals("nextLvl"))
+				else if (event.name.equals("nextLvl"))
 				{
-					this.level.entities[0].events.set(i, null);
+					this.player.events.set(i, null);
 					if (this.currentLvl + 1 >= this.maxLvl)
 						this.gameOver = true;
 					else
@@ -367,10 +374,10 @@ public class Screen extends JPanel implements Runnable
 					this.currentTime += System.currentTimeMillis() - this.lastTime;
 					this.lastTime = 0;
 				}
-				else if (this.level.entities[0].events.get(i).name.equals("break"))
+				else if (event.name.equals("break"))
 				{
-					int x = this.level.entities[0].events.get(i).x;
-					int y = this.level.entities[0].events.get(i).y;
+					int x = event.x;
+					int y = event.y;
 					Tile t = this.level.tiles2[x][y];
 					if (t != null)
 					{
@@ -417,16 +424,27 @@ public class Screen extends JPanel implements Runnable
 							}
 						}
 					}
-					this.level.entities[0].events.set(i, null);
+					this.player.events.set(i, null);
 				}
-				else if (this.level.entities[0].events.get(i).name.equals("displTxt"))
+				else if (event.name.equals("displTxt"))
 				{
+					Tile parentSign = this.level.tiles2[event.x][event.y];
+					int msgId = parentSign.id;
+					boolean signToRep = false;
 					for (int a = 0; a < this.messages.size(); a++)
 					{
 						if (this.messages.get(a).type.equals("sign"))
-							this.messages.remove(a);
+						{
+							signToRep = true;
+							if(this.messages.get(a).id != msgId)
+							{
+								this.messages.remove(a);
+								this.messages.add(new Message(gX(60), gY(0)-10, msgId, parentSign.getText(), 300).type("sign"));
+							}
+						}
 					}
-					this.messages.add(new Message(gX(60), gY(0)-10, this.level.tiles2[this.level.entities[0].events.get(i).x][this.level.entities[0].events.get(i).y].getText(), 300).type("sign"));
+					if(!signToRep)
+						this.messages.add(new Message(gX(60), gY(0)-10, msgId, parentSign.getText(), 300).type("sign"));
 				}
 			}
 			}
@@ -440,17 +458,22 @@ public class Screen extends JPanel implements Runnable
 				{
 					for (int i = 0; i < this.level.entities.length; i++)
 					{
-						if (this.level.entities[i] != null)
-							this.level.entities[i] = this.level.entities[i].update(.006, this.level);
+						Entity ent = this.level.entities[i];
+						if (ent != null)
+							ent = ent.update(.006, this.level);
 					}
 					for (int i = 0; i < this.level.ents2.length; i++)
 					{
-						if (this.level.ents2[i] != null)
-							this.level.ents2[i] = this.level.ents2[i].update(.006, this.level);
+						Entity ent = this.level.ents2[i];
+						if (ent != null)
+							ent = ent.update(.006, this.level);
 					}
 				}
-			else
-				this.level = copyLvl(LevelList.getLevel(this.libLibrary, this.currentLvl));
+				else
+				{
+					this.level = copyLvl(LevelList.getLevel(this.libLibrary, this.currentLvl));
+					this.player = this.level.entities[0];
+				}
 		}
 		for (int i = 0; i < this.messages.size(); i++)
 		{
@@ -556,19 +579,20 @@ public class Screen extends JPanel implements Runnable
 				{
 					if (this.level != null)
 					{
-						g.drawImage(this.level.tiles[x][y].texture, gX(32*x), gY(y*32), 32, 32, null);
+						Tile tile = this.level.tiles[x][y];
+						g.drawImage(tile.texture, gX(32*x), gY(y*32), 32, 32, null);
 						for (int i = 0; i < 4; i++)
 						{
-							if (this.level.tiles[x][y].borders[i] != null)
+							if (tile.borders[i] != null)
 							{
-								if (this.level.tiles[x][y].borders[i])
+								if (tile.borders[i])
 								{
 									g.drawImage(this.libLibrary.tex.imageListTile.get(i), gX(32*x), gY(32*y), 32, 32, null);
 								}
 							}
-							if (this.level.tiles[x][y].corners[i] != null)
+							if (tile.corners[i] != null)
 							{
-								if (this.level.tiles[x][y].corners[i])
+								if (tile.corners[i])
 								{
 									g.drawImage(this.libLibrary.tex.imageListTile.get(i + 4), gX(32*x), gY(32*y), 32, 32, null);
 								}
@@ -580,11 +604,17 @@ public class Screen extends JPanel implements Runnable
 			if (this.level != null)
 			{
 				for (int i = 0; i < this.level.entities.length; i++)
-					if (this.level.entities[i] != null && this.level.entities[i].visible)
-						g.drawImage(this.level.entities[i].texture, gX(this.level.entities[i].x*32), gY(this.level.entities[i].y*32), null);
+				{
+					Entity entity = this.level.entities[i];
+					if (entity != null && entity.visible)
+						g.drawImage(entity.texture, gX(entity.x*32), gY(entity.y*32), null);
+				}
 				for (int i = 0; i < this.level.ents2.length; i++)
-					if (this.level.ents2[i] != null && this.level.ents2[i].visible)
-						g.drawImage(this.level.ents2[i].texture, gX(this.level.ents2[i].x*32), gY(this.level.ents2[i].y*32), null);
+				{
+					Entity entity = this.level.ents2[i];
+					if (entity != null && entity.visible)
+						g.drawImage(entity.texture, gX(entity.x*32), gY(entity.y*32), null);
+				}
 			}
 			for (int y = 0; y < 25; y++)
 			{
@@ -592,36 +622,40 @@ public class Screen extends JPanel implements Runnable
 				{
 					if (this.level != null)
 					{
-						if (this.level.tiles2[x][y] != null)
+						Tile tile = this.level.tiles2[x][y];
+						if (tile != null)
 						{
-							if (this.level.tiles2[x][y].id >= 8 && this.level.tiles2[x][y].id <= 11 && this.level.tiles2[x-1][y-1] != null)
+							if (tile.id >= 8 && tile.id <= 11)
 							{
-								if (this.level.tiles2[x][y].id == this.level.tiles2[x-1][y-1].id && this.level.tiles2[x][y].id >= 8 && this.level.tiles2[x][y].id <= 11)
-									g.drawImage(this.level.tiles2[x][y].texture, gX(32*(x-1)), gY((y-1)*32), 64, 64, null);
-								else
-									g.drawImage(this.level.tiles2[x][y].texture, gX(32*x), gY(y*32), 32, 32, null);
+								if(this.level.tiles2[x-1][y-1] != null)
+								{
+									if (tile.id == this.level.tiles2[x-1][y-1].id && tile.id >= 8 && tile.id <= 11)
+										g.drawImage(tile.texture, gX(32*(x-1)), gY((y-1)*32), 64, 64, null);
+									else
+										g.drawImage(tile.texture, gX(32*x), gY(y*32), 32, 32, null);
+								}
 							}
 							else
-								g.drawImage(this.level.tiles2[x][y].texture, gX(32*x), gY(y*32), 32, 32, null);
+								g.drawImage(tile.texture, gX(32*x), gY(y*32), 32, 32, null);
 						}
 					}
 				}
 			}
 			displMessages(g);
-			
-			if (this.level.entities[0].key.equals("copper"))
+			String keyType = this.player.key;
+			if (keyType.equals("copper"))
 			{
 				g.drawImage(this.libLibrary.tex.imageListTile.get(15), gX(1056 - 64), gY(0) -34, 32, 32, null);
 			}
-			else if (this.level.entities[0].key.equals("silver"))
+			else if (keyType.equals("silver"))
 			{
 				g.drawImage(this.libLibrary.tex.imageListTile.get(16), gX(1056 - 64), gY(0) - 34, 32, 32, null);
 			}
-			else if (this.level.entities[0].key.equals("gold"))
+			else if (keyType.equals("gold"))
 			{
 				g.drawImage(this.libLibrary.tex.imageListTile.get(17), gX(1056 - 64), gY(0) - 34, 32, 32, null);
 			}
-			else if (this.level.entities[0].key.equals("rusted"))
+			else if (keyType.equals("rusted"))
 			{
 				g.drawImage(this.libLibrary.tex.imageListTile.get(18), gX(1056 - 64), gY(0) - 34, 32, 32, null);
 			}
@@ -651,9 +685,10 @@ public class Screen extends JPanel implements Runnable
 	{
 		for (int i = 0; i < this.animations.size(); i++)
 		{
-			if (this.animations.get(i) != null)
+			Animation animation = this.animations.get(i);
+			if (animation != null)
 			{
-				g.drawImage(this.animations.get(i).frames[this.animations.get(i).tick], (int) this.animations.get(i).x, (int) this.animations.get(i).y, this.animations.get(i).width, this.animations.get(i).height, null);
+				g.drawImage(animation.frames[animation.tick], (int) animation.x, (int) animation.y, animation.width, animation.height, null);
 			}
 		}
 	}
@@ -662,9 +697,10 @@ public class Screen extends JPanel implements Runnable
 	{
 		for (int i = 0; i < this.particles.size(); i++)
 		{
-			if (this.particles.get(i) != null)
+			Particle particle = this.particles.get(i);
+			if (particle != null)
 			{
-				g.drawImage(this.particles.get(i).frames[0], (int) this.particles.get(i).x, (int) this.particles.get(i).y, this.particles.get(i).width, this.particles.get(i).height, null);
+				g.drawImage(particle.frames[0], (int) particle.x, (int) particle.y, particle.width, particle.height, null);
 			}
 		}
 	}
@@ -673,9 +709,10 @@ public class Screen extends JPanel implements Runnable
 	{
 		for (int i = 0; i < this.messages.size(); i++)
 		{
-			if (this.messages.get(i) != null)
+			Message message = this.messages.get(i);
+			if (message != null)
 			{
-				g.drawString(this.messages.get(i).name, this.messages.get(i).x, this.messages.get(i).y);
+				g.drawString(message.name, message.x, message.y);
 			}
 		}
 	}

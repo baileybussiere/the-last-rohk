@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import levels.Level;
 import data.Event;
+import data.Tile;
 import data.LibLibrary;
 
 public class Entity
@@ -46,49 +47,53 @@ public class Entity
 		this.ticksTillKey--;
 		this.x += this.vX*t;
 		this.y += this.vY*t;
-		if (l.tiles2[roundUp(this.x)][roundUp(this.y)] != null)
+		Tile tuu = l.tiles2[roundUp(this.x)][roundUp(this.y)];
+		Tile tud = l.tiles2[roundUp(this.x)][roundDown(this.y)];
+		Tile tdu = l.tiles2[roundDown(this.x)][roundUp(this.y)];
+		Tile tdd = l.tiles2[roundDown(this.x)][roundDown(this.y)];
+		if (tuu != null)
 		{
-			if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id == 2)
+			if (tuu.id == 2)
 			{
 				this.lib.audio.clipList.get(4).stop();
 				this.lib.audio.clipList.get(4).setFramePosition(0);
 				this.lib.audio.clipList.get(4).start();
 				this.events.add(new Event("nextLvl", roundUp(this.x), roundUp(this.y)));
 			}
-			else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id == -1)
+			else if (tuu.id == -1)
 			{
 				this.lib.audio.clipList.get(5).stop();
 				this.lib.audio.clipList.get(5).setFramePosition(0);
 				this.lib.audio.clipList.get(5).start();
 				this.events.add(new Event("displTxt", roundUp(this.x), roundUp(this.y)));
 			}
-			else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id == 12)
+			else if (tuu.id == 12)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
 				this.lib.audio.clipList.get(0).start();
 				this.dead = true;
 			}
-			else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].isKey && this.ticksTillKey <= 0)
+			else if (tuu.isKey && this.ticksTillKey <= 0)
 			{
 				this.lib.audio.clipList.get(2).stop();
 				this.lib.audio.clipList.get(2).setFramePosition(0);
 				this.lib.audio.clipList.get(2).start();
-				String k = l.tiles2[roundUp(this.x)][roundUp(this.y)].color();
+				String k = tuu.color();
 				if (this.key.equals(""))
-					l.tiles2[roundUp(this.x)][roundUp(this.y)] = null;
+					tuu = null;
 				else if (this.key.equals("copper"))
-					l.tiles2[roundUp(this.x)][roundUp(this.y)] = lib.tile.tileList.get(4);
+					tuu = lib.tile.tileList.get(4);
 				else if (this.key.equals("silver"))
-					l.tiles2[roundUp(this.x)][roundUp(this.y)] = lib.tile.tileList.get(5);
+					tuu = lib.tile.tileList.get(5);
 				else if (this.key.equals("gold"))
-					l.tiles2[roundUp(this.x)][roundUp(this.y)] = lib.tile.tileList.get(6);
+					tuu = lib.tile.tileList.get(6);
 				else if (this.key.equals("rusted"))
-					l.tiles2[roundUp(this.x)][roundUp(this.y)] = lib.tile.tileList.get(7);
+					tuu = lib.tile.tileList.get(7);
 				this.key = k;
 				this.ticksTillKey = 40;
 			}
-			else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id == 17 && l.tiles2[roundUp(this.x)][roundUp(this.y)].tick > 240)
+			else if (tuu.id == 17 && tuu.tick > 240)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
@@ -96,49 +101,49 @@ public class Entity
 				this.dead = true;
 			}
 		}
-		if (l.tiles2[roundUp(this.x)][roundDown(this.y)] != null)
+		if (tud != null)
 		{
-			if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id == 2)
+			if (tud.id == 2)
 			{
 				this.lib.audio.clipList.get(4).stop();
 				this.lib.audio.clipList.get(4).setFramePosition(0);
 				this.lib.audio.clipList.get(4).start();
 				this.events.add(new Event("nextLvl", roundUp(this.x), roundDown(this.y)));
 			}
-			else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id == -1)
+			else if (tud.id == -1)
 			{
 				this.lib.audio.clipList.get(5).stop();
 				this.lib.audio.clipList.get(5).setFramePosition(0);
 				this.lib.audio.clipList.get(5).start();
 				this.events.add(new Event("displTxt", roundUp(this.x), roundDown(this.y)));
 			}
-			else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id == 12)
+			else if (tud.id == 12)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
 				this.lib.audio.clipList.get(0).start();
 				this.dead = true;
 			}
-			else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].isKey && this.ticksTillKey <= 0)
+			else if (tud.isKey && this.ticksTillKey <= 0)
 			{
 				this.lib.audio.clipList.get(2).stop();
 				this.lib.audio.clipList.get(2).setFramePosition(0);
 				this.lib.audio.clipList.get(2).start();
-				String k = l.tiles2[roundUp(this.x)][roundDown(this.y)].color();
+				String k = tud.color();
 				if (this.key.equals(""))
-					l.tiles2[roundUp(this.x)][roundDown(this.y)] = null;
+					tud = null;
 				else if (this.key.equals("copper"))
-					l.tiles2[roundUp(this.x)][roundDown(this.y)] = lib.tile.tileList.get(4);
+					tud = lib.tile.tileList.get(4);
 				else if (this.key.equals("silver"))
-					l.tiles2[roundUp(this.x)][roundDown(this.y)] = lib.tile.tileList.get(5);
+					tud = lib.tile.tileList.get(5);
 				else if (this.key.equals("gold"))
-					l.tiles2[roundUp(this.x)][roundDown(this.y)] = lib.tile.tileList.get(6);
+					tud = lib.tile.tileList.get(6);
 				else if (this.key.equals("rusted"))
-					l.tiles2[roundUp(this.x)][roundDown(this.y)] = lib.tile.tileList.get(7);
+					tud = lib.tile.tileList.get(7);
 				this.key = k;
 				this.ticksTillKey = 40;
 			}
-			else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id == 17 && l.tiles2[roundUp(this.x)][roundDown(this.y)].tick > 240)
+			else if (tud.id == 17 && tud.tick > 240)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
@@ -146,49 +151,49 @@ public class Entity
 				this.dead = true;
 			}
 		}
-		if (l.tiles2[roundDown(this.x)][roundUp(this.y)] != null)
+		if (tdu != null)
 		{
-			if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id == 2)
+			if (tdu.id == 2)
 			{
 				this.lib.audio.clipList.get(4).stop();
 				this.lib.audio.clipList.get(4).setFramePosition(0);
 				this.lib.audio.clipList.get(4).start();
 				this.events.add(new Event("nextLvl", roundDown(this.x), roundUp(this.y)));
 			}
-			else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id == -1)
+			else if (tdu.id == -1)
 			{
 				this.lib.audio.clipList.get(5).stop();
 				this.lib.audio.clipList.get(5).setFramePosition(0);
 				this.lib.audio.clipList.get(5).start();
 				this.events.add(new Event("displTxt", roundDown(this.x), roundUp(this.y)));
 			}
-			else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id == 12)
+			else if (tdu.id == 12)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
 				this.lib.audio.clipList.get(0).start();
 				this.dead = true;
 			}
-			else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].isKey && this.ticksTillKey <= 0)
+			else if (tdu.isKey && this.ticksTillKey <= 0)
 			{
 				this.lib.audio.clipList.get(2).stop();
 				this.lib.audio.clipList.get(2).setFramePosition(0);
 				this.lib.audio.clipList.get(2).start();
-				String k = l.tiles2[roundDown(this.x)][roundUp(this.y)].color();
+				String k = tdu.color();
 				if (this.key.equals(""))
-					l.tiles2[roundDown(this.x)][roundUp(this.y)] = null;
+					tdu = null;
 				else if (this.key.equals("copper"))
-					l.tiles2[roundDown(this.x)][roundUp(this.y)] = lib.tile.tileList.get(4);
+					tdu = lib.tile.tileList.get(4);
 				else if (this.key.equals("silver"))
-					l.tiles2[roundDown(this.x)][roundUp(this.y)] = lib.tile.tileList.get(5);
+					tdu = lib.tile.tileList.get(5);
 				else if (this.key.equals("gold"))
-					l.tiles2[roundDown(this.x)][roundUp(this.y)] = lib.tile.tileList.get(6);
+					tdu = lib.tile.tileList.get(6);
 				else if (this.key.equals("rusted"))
-					l.tiles2[roundDown(this.x)][roundUp(this.y)] = lib.tile.tileList.get(7);
+					tdu = lib.tile.tileList.get(7);
 				this.key = k;
 				this.ticksTillKey = 40;
 			}
-			else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id == 17 && l.tiles2[roundDown(this.x)][roundUp(this.y)].tick > 240)
+			else if (tdu.id == 17 && tdu.tick > 240)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
@@ -196,49 +201,49 @@ public class Entity
 				this.dead = true;
 			}
 		}
-		if (l.tiles2[roundDown(this.x)][roundDown(this.y)] != null)
+		if (tdd != null)
 		{
-			if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id == 2)
+			if (tdd.id == 2)
 			{
 				this.lib.audio.clipList.get(4).stop();
 				this.lib.audio.clipList.get(4).setFramePosition(0);
 				this.lib.audio.clipList.get(4).start();
 				this.events.add(new Event("nextLvl", roundDown(this.x), roundDown(this.y)));
 			}
-			else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id == -1)
+			else if (tdd.id == -1)
 			{
 				this.lib.audio.clipList.get(5).stop();
 				this.lib.audio.clipList.get(5).setFramePosition(0);
 				this.lib.audio.clipList.get(5).start();
 				this.events.add(new Event("displTxt", roundDown(this.x), roundDown(this.y)));
 			}
-			else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id == 12)
+			else if (tdd.id == 12)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
 				this.lib.audio.clipList.get(0).start();
 				this.dead = true;
 			}
-			else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].isKey && this.ticksTillKey <= 0)
+			else if (tdd.isKey && this.ticksTillKey <= 0)
 			{
 				this.lib.audio.clipList.get(2).stop();
 				this.lib.audio.clipList.get(2).setFramePosition(0);
 				this.lib.audio.clipList.get(2).start();
-				String k = l.tiles2[roundDown(this.x)][roundDown(this.y)].color();
+				String k = tdd.color();
 				if (this.key.equals(""))
-					l.tiles2[roundDown(this.x)][roundDown(this.y)] = null;
+					tdd = null;
 				else if (this.key.equals("copper"))
-					l.tiles2[roundDown(this.x)][roundDown(this.y)] = lib.tile.tileList.get(4);
+					tdd = lib.tile.tileList.get(4);
 				else if (this.key.equals("silver"))
-					l.tiles2[roundDown(this.x)][roundDown(this.y)] = lib.tile.tileList.get(5);
+					tdd = lib.tile.tileList.get(5);
 				else if (this.key.equals("gold"))
-					l.tiles2[roundDown(this.x)][roundDown(this.y)] = lib.tile.tileList.get(6);
+					tdd = lib.tile.tileList.get(6);
 				else if (this.key.equals("rusted"))
-					l.tiles2[roundDown(this.x)][roundDown(this.y)] = lib.tile.tileList.get(7);
+					tdd = lib.tile.tileList.get(7);
 				this.key = k;
 				this.ticksTillKey = 40;
 			}
-			else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id == 17 && l.tiles2[roundDown(this.x)][roundDown(this.y)].tick > 240)
+			else if (tdd.id == 17 && tdd.tick > 240)
 			{
 				this.lib.audio.clipList.get(0).stop();
 				this.lib.audio.clipList.get(0).setFramePosition(0);
@@ -445,21 +450,21 @@ public class Entity
 		}
 		if (this.vX > 0)
 		{
-			if (l.tiles2[roundUp(this.x)][roundUp(this.y)] != null && l.tiles2[roundUp(this.x)][roundDown(this.y)] != null)
+			if (tuu != null && tud != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundUp(this.y)].isSolid && l.tiles2[roundUp(this.x)][roundDown(this.y)].isSolid)
+				if (tuu.isSolid && tud.isSolid)
 				{
 					this.vX *= -1;
-					if (l.tiles2[roundUp(this.x)][roundUp(this.y)].breakable)
+					if (tuu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tuu.id >= 8 && tuu.id <= 11 && tuu.color() == this.key)
 					{
-						if (l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+						if (tuu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -468,16 +473,16 @@ public class Entity
 							this.key = "";
 						}
 					}
-					if (l.tiles2[roundUp(this.x)][roundDown(this.y)].breakable)
+					if (tud.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundDown(this.y)].id <= 11 && l.tiles2[roundUp(this.x)][roundDown(this.y)].color() == this.key)
+					else if (tud.id >= 8 && tud.id <= 11 && tud.color() == this.key)
 					{
-						if (l.tiles2[roundUp(this.x)][roundDown(this.y)].color() == this.key)
+						if (tud.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -489,9 +494,9 @@ public class Entity
 					this.x -= this.x + 1 - roundUp(this.x);
 				}
 			}
-			else if (l.tiles2[roundUp(this.x)][roundUp(this.y)] != null)
+			else if (tuu != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundUp(this.y)].isSolid)
+				if (tuu.isSolid)
 				{
 					if (roundUp(this.y) - this.y > this.y - roundDown(this.y))
 					{
@@ -502,16 +507,16 @@ public class Entity
 					{
 						this.vX *= -1;
 					}
-					if (l.tiles2[roundUp(this.x)][roundUp(this.y)].breakable)
+					if (tuu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tuu.id >= 8 && tuu.id <= 11 && tuu.color() == this.key)
 					{
-						if (l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+						if (tuu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -528,9 +533,9 @@ public class Entity
 					}
 				}
 			}
-			else if (l.tiles2[roundUp(this.x)][roundDown(this.y)] != null)
+			else if (tud != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundDown(this.y)].isSolid)
+				if (tud.isSolid)
 				{
 					if (roundUp(this.y) - this.y < this.y - roundDown(this.y))
 					{
@@ -541,16 +546,16 @@ public class Entity
 					{
 						this.vX *= -1;
 					}
-					if (l.tiles2[roundUp(this.x)][roundDown(this.y)].breakable)
+					if (tud.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundDown(this.y)].id <= 11 && l.tiles2[roundUp(this.x)][roundDown(this.y)].color() == this.key)
+					else if (tud.id >= 8 && tud.id <= 11 && tud.color() == this.key)
 					{
-						if (l.tiles2[roundUp(this.x)][roundDown(this.y)].color() == this.key)
+						if (tud.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -570,21 +575,21 @@ public class Entity
 		}
 		else if (this.vX < 0)
 		{
-			if (l.tiles2[roundDown(this.x)][roundUp(this.y)] != null && l.tiles2[roundDown(this.x)][roundDown(this.y)] != null)
+			if (tdu != null && tdd != null)
 			{
-				if (l.tiles2[roundDown(this.x)][roundUp(this.y)].isSolid && l.tiles2[roundDown(this.x)][roundDown(this.y)].isSolid)
+				if (tdu.isSolid && tdd.isSolid)
 				{
 					this.vX *= -1;
-					if (l.tiles2[roundDown(this.x)][roundUp(this.y)].breakable)
+					if (tdu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tdu.id >= 8 && tdu.id <= 11 && tdu.color() == this.key)
 					{
-						if (l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+						if (tdu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -593,16 +598,16 @@ public class Entity
 							this.key = "";
 						}
 					}
-					if (l.tiles2[roundDown(this.x)][roundDown(this.y)].breakable)
+					if (tdd.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundDown(this.y)].id <= 11 && l.tiles2[roundDown(this.x)][roundDown(this.y)].color() == this.key)
+					else if (tdd.id >= 8 && tdd.id <= 11 && tdd.color() == this.key)
 					{
-						if (l.tiles2[roundDown(this.x)][roundDown(this.y)].color() == this.key)
+						if (tdd.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -614,9 +619,9 @@ public class Entity
 					this.x += roundDown(this.x) + 1 - x;
 				}
 			}
-			else if (l.tiles2[roundDown(this.x)][roundUp(this.y)] != null)
+			else if (tdu != null)
 			{
-				if (l.tiles2[roundDown(this.x)][roundUp(this.y)].isSolid)
+				if (tdu.isSolid)
 				{
 					if (roundUp(this.y) - this.y > this.y - roundDown(this.y))
 					{
@@ -627,16 +632,16 @@ public class Entity
 					{
 						this.vX *= -1;
 					}
-					if (l.tiles2[roundDown(this.x)][roundUp(this.y)].breakable)
+					if (tdu.breakable)
 					{
 						this.events.add(new Event("break", roundDown(this.x), roundUp(this.y)));
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 					}
-					else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tdu.id >= 8 && tdu.id <= 11 && tdu.color() == this.key)
 					{
-						if (l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+						if (tdu.color() == this.key)
 						{
 
 							this.lib.audio.clipList.get(3).stop();
@@ -655,9 +660,9 @@ public class Entity
 					}
 				}
 			}
-			else if (l.tiles2[roundDown(this.x)][roundDown(this.y)] != null)
+			else if (tdd != null)
 			{
-				if (l.tiles2[roundDown(this.x)][roundDown(this.y)].isSolid)
+				if (tdd.isSolid)
 				{
 					if (roundUp(this.y) - this.y < this.y - roundDown(this.y))
 					{
@@ -668,16 +673,16 @@ public class Entity
 					{
 						this.vX *= -1;
 					}
-					if (l.tiles2[roundDown(this.x)][roundDown(this.y)].breakable)
+					if (tdd.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundDown(this.y)].id <= 11 && l.tiles2[roundDown(this.x)][roundDown(this.y)].color() == this.key)
+					else if (tdd.id >= 8 && tdd.id <= 11 && tdd.color() == this.key)
 					{
-						if (l.tiles2[roundDown(this.x)][roundDown(this.y)].color() == this.key)
+						if (tdd.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -697,21 +702,21 @@ public class Entity
 		}
 		else if (this.vY > 0)
 		{
-			if (l.tiles2[roundUp(this.x)][roundUp(this.y)] != null && l.tiles2[roundDown(this.x)][roundUp(this.y)] != null)
+			if (tuu != null && tdu != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundUp(this.y)].isSolid && l.tiles2[roundDown(this.x)][roundUp(this.y)].isSolid)
+				if (tuu.isSolid && tdu.isSolid)
 				{
 					this.vY *= -1;
-					if (l.tiles2[roundUp(this.x)][roundUp(this.y)].breakable)
+					if (tuu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tuu.id >= 8 && tuu.id <= 11 && tuu.color() == this.key)
 					{
-						if (l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+						if (tuu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -720,16 +725,16 @@ public class Entity
 							this.key = "";
 						}
 					}
-					if (l.tiles2[roundDown(this.x)][roundUp(this.y)].breakable)
+					if (tdu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tdu.id >= 8 && tdu.id <= 11 && tdu.color() == this.key)
 					{
-						if (l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+						if (tdu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -741,9 +746,9 @@ public class Entity
 					this.y -= this.y + 1 - roundUp(this.y);
 				}
 			}
-			else if (l.tiles2[roundUp(this.x)][roundUp(this.y)] != null)
+			else if (tuu != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundUp(this.y)].isSolid)
+				if (tuu.isSolid)
 				{
 					if (roundUp(this.x) - this.x > this.x - roundDown(this.x))
 					{
@@ -754,16 +759,16 @@ public class Entity
 					{
 						this.vY *= -1;
 					}
-					if (l.tiles2[roundUp(this.x)][roundUp(this.y)].breakable)
+					if (tuu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tuu.id >= 8 && tuu.id <= 11 && tuu.color() == this.key)
 					{
-						if (l.tiles2[roundUp(this.x)][roundUp(this.y)].color() == this.key)
+						if (tuu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -780,9 +785,9 @@ public class Entity
 					}
 				}
 			}
-			else if (l.tiles2[roundDown(this.x)][roundUp(this.y)] != null)
+			else if (tdu != null)
 			{
-				if (l.tiles2[roundDown(this.x)][roundUp(this.y)].isSolid)
+				if (tdu.isSolid)
 				{
 					if (roundUp(this.x) - this.x < this.x - roundDown(this.x))
 					{
@@ -793,16 +798,16 @@ public class Entity
 					{
 						this.vY *= -1;
 					}
-					if (l.tiles2[roundDown(this.x)][roundUp(this.y)].breakable)
+					if (tdu.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundUp(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundUp(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundUp(this.y)].id <= 11 && l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+					else if (tdu.id >= 8 && tdu.id <= 11 && tdu.color() == this.key)
 					{
-						if (l.tiles2[roundDown(this.x)][roundUp(this.y)].color() == this.key)
+						if (tdu.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -822,21 +827,21 @@ public class Entity
 		}
 		else if (this.vY < 0)
 		{
-			if (l.tiles2[roundUp(this.x)][roundDown(this.y)] != null && l.tiles2[roundDown(this.x)][roundDown(this.y)] != null)
+			if (tud != null && tdd != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundDown(this.y)].isSolid && l.tiles2[roundDown(this.x)][roundDown(this.y)].isSolid)
+				if (tud.isSolid && tdd.isSolid)
 				{
 					this.vY *= -1;
-					if (l.tiles2[roundUp(this.x)][roundDown(this.y)].breakable)
+					if (tud.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundDown(this.y)].id <= 11)
+					else if (tud.id >= 8 && tud.id <= 11)
 					{
-						if (l.tiles2[roundUp(this.x)][roundDown(this.y)].color() == this.key)
+						if (tud.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -845,16 +850,16 @@ public class Entity
 							this.key = "";
 						}
 					}
-					if (l.tiles2[roundDown(this.x)][roundDown(this.y)].breakable)
+					if (tdd.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundDown(this.y)].id <= 11)
+					else if (tdd.id >= 8 && tdd.id <= 11)
 					{
-						if (l.tiles2[roundDown(this.x)][roundDown(this.y)].color() == this.key)
+						if (tdd.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -866,9 +871,9 @@ public class Entity
 					this.y += roundDown(this.y) + 1 - y;
 				}
 			}
-			else if (l.tiles2[roundUp(this.x)][roundDown(this.y)] != null)
+			else if (tud != null)
 			{
-				if (l.tiles2[roundUp(this.x)][roundDown(this.y)].isSolid)
+				if (tud.isSolid)
 				{
 					if (roundUp(this.x) - this.x > this.x - roundDown(this.x))
 					{
@@ -879,16 +884,16 @@ public class Entity
 					{
 						this.vY *= -1;
 					}
-					if (l.tiles2[roundUp(this.x)][roundDown(this.y)].breakable)
+					if (tud.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundUp(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundUp(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundUp(this.x)][roundDown(this.y)].id <= 11)
+					else if (tud.id >= 8 && tud.id <= 11)
 					{
-						if (l.tiles2[roundUp(this.x)][roundDown(this.y)].color() == this.key)
+						if (tud.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);
@@ -905,9 +910,9 @@ public class Entity
 					}
 				}
 			}
-			else if (l.tiles2[roundDown(this.x)][roundDown(this.y)] != null)
+			else if (tdd != null)
 			{
-				if (l.tiles2[roundDown(this.x)][roundDown(this.y)].isSolid)
+				if (tdd.isSolid)
 				{
 					if (roundUp(this.x) - this.x < this.x - roundDown(this.x))
 					{
@@ -918,16 +923,16 @@ public class Entity
 					{
 						this.vY *= -1;
 					}
-					if (l.tiles2[roundDown(this.x)][roundDown(this.y)].breakable)
+					if (tdd.breakable)
 					{
 						this.lib.audio.clipList.get(1).stop();
 						this.lib.audio.clipList.get(1).setFramePosition(0);
 						this.lib.audio.clipList.get(1).start();
 						this.events.add(new Event("break", roundDown(this.x), roundDown(this.y)));
 					}
-					else if (l.tiles2[roundDown(this.x)][roundDown(this.y)].id >= 8 && l.tiles2[roundDown(this.x)][roundDown(this.y)].id <= 11)
+					else if (tdd.id >= 8 && tdd.id <= 11)
 					{
-						if (l.tiles2[roundDown(this.x)][roundDown(this.y)].color() == this.key)
+						if (tdd.color() == this.key)
 						{
 							this.lib.audio.clipList.get(3).stop();
 							this.lib.audio.clipList.get(3).setFramePosition(0);

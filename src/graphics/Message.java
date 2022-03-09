@@ -4,14 +4,16 @@ public class Message
 {
 	public int x;
 	public int y;
+	public int id;
 	public int ticks;
 	public String name;
 	public String type;
 	
-	public Message(int x, int y, String name, int ticks)
+	public Message(int x, int y, int id, String name, int ticks)
 	{
 		this.x = x;
 		this.y = y;
+		this.id = id;
 		this.ticks = ticks;
 		this.name = name;
 	}
